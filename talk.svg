@@ -19,8 +19,8 @@
    style="background: #000">
   <script
      xlink:href="talk.js"
-     id="script5450"
-     type="text/ecmascript" />
+     type="text/ecmascript"
+     id="script5450" />
   <defs
      id="defs4">
     <marker
@@ -58,9 +58,9 @@
      borderopacity="1.0"
      inkscape:pageopacity="1"
      inkscape:pageshadow="2"
-     inkscape:zoom="0.45254834"
-     inkscape:cx="686.4562"
-     inkscape:cy="424.26526"
+     inkscape:zoom="0.9747195"
+     inkscape:cx="-112.09697"
+     inkscape:cy="755.95881"
      inkscape:document-units="px"
      inkscape:current-layer="all"
      showgrid="false"
@@ -223,46 +223,52 @@
            inkscape:label="#rect6043" />
         <text
            xml:space="preserve"
-           style="font-size:5.57948971px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#ffffff;fill-opacity:1;stroke:none;font-family:Verdana;-inkscape-font-specification:Verdana"
-           x="167.0632"
+           style="font-size:5.57948971px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:center;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:middle;fill:#ffffff;fill-opacity:1;stroke:none;font-family:Verdana;-inkscape-font-specification:Verdana"
+           x="185.70291"
            y="663.50433"
            id="text3757-5"
-           sodipodi:linespacing="125%"><tspan
-             sodipodi:role="line"
-             id="tspan3759-08"
-             x="167.0632"
-             y="663.50433">ClojureScript</tspan></text>
+           sodipodi:linespacing="125%">ClojureScript</text>
         <text
            xml:space="preserve"
-           style="font-size:3.36013484px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#ffffff;fill-opacity:1;stroke:none;font-family:Verdana;-inkscape-font-specification:Verdana"
-           x="171.57863"
+           style="font-size:3.36013484px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:center;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:middle;fill:#ffffff;fill-opacity:1;stroke:none;font-family:Verdana;-inkscape-font-specification:Verdana"
+           x="185.47206"
            y="667.73199"
            id="text3757-5-3"
            sodipodi:linespacing="125%"><tspan
              sodipodi:role="line"
              id="tspan3759-08-5"
-             x="171.57863"
-             y="667.73199">What is it really?</tspan></text>
+             x="185.47206"
+             y="667.73199">...wait, what?</tspan></text>
         <text
            xml:space="preserve"
            style="font-size:2.66238523px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:center;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:middle;fill:#ffffff;fill-opacity:1;stroke:none;font-family:Verdana;-inkscape-font-specification:Verdana"
-           x="184.79231"
+           x="185.63979"
            y="677.85718"
            id="text3757-5-3-9"
            sodipodi:linespacing="125%"><tspan
              sodipodi:role="line"
              id="tspan3759-08-5-3"
-             x="184.79231"
+             x="185.63979"
              y="677.85718">Chouser</tspan><tspan
              sodipodi:role="line"
-             x="184.79231"
+             x="185.63979"
              y="681.18518"
              id="tspan5389">25 Aug 2011</tspan><tspan
              sodipodi:role="line"
-             x="184.79231"
+             x="185.63979"
              y="684.51312"
              id="tspan5391">Chicago Clojure Users Group</tspan></text>
-      </g>
+        <flowRoot
+           xml:space="preserve"
+           id="flowRoot3026"
+           style="fill:black;stroke:none;stroke-opacity:1;stroke-width:1px;stroke-linejoin:miter;stroke-linecap:butt;fill-opacity:1;font-family:Times New Roman;font-style:normal;font-weight:normal;font-size:24px;-inkscape-font-specification:Times New Roman;font-stretch:normal;font-variant:normal;text-anchor:start;text-align:start;writing-mode:lr;line-height:125%;letter-spacing:0px;word-spacing:0px"><flowRegion
+             id="flowRegion3028"><rect
+               id="rect3030"
+               width="372.41483"
+               height="132.34576"
+               x="-64.63398"
+               y="44.714996" /></flowRegion><flowPara
+             id="flowPara3032"></flowPara></flowRoot>      </g>
     </g>
   </g>
 </svg>

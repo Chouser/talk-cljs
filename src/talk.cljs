@@ -1,5 +1,9 @@
 (ns talk
-  (:require [goog.dom :as dom]))
+  (:require [goog.dom :as dom]
+            ;[goog.fx :as fx]
+            [goog.fx.Animation :as Animation]
+            [goog.events :as events]
+            [goog.events.KeyHandler :as KeyHandler]))
 
 (def svg (.documentElement js/document))
 
@@ -40,9 +44,62 @@
   [:view-title {:once/title {:opacity 1}}
    :view-main {}])
 
+(declare computed-steps)
+
 (def world (atom nil))
 
-(set! (.onload window)
+(def step (atom 0))
+
+(def duration 1000)
+
+(defn new-transition [start end]
+  (if (number? start)
+    (if (= start end)
+      start
+      (linear start end duration))
+    (zipmap (keys start)
+            (map new-transition (vals start) (vals end)))))
+
+(defn compute-animation [obj t]
+  (if (fn? obj)
+    (obj t)
+    (zipmap (keys obj) (map #(compute-animation % t) (vals obj)))))
+
+(def transition (atom nil))
+
+(defn alter-step [delta]
+  (let [i (swap! step #(max 0 (min (dec (count computed-steps)) (+ % delta))))]
+    (reset! transition
+            (with-meta
+              (new-transition @world (nth computed-steps i))
+              {:start (js/Date.)}))
+    (Animation/registerAnimation transition)))
+
+(set! (.cycle transition)
   (fn []
-    (reset! world {::view (client-rect (dom/getElement ":view-title"))})
+    (let [trans @transition
+          t (- (js/Date.) (:start (meta trans)))
+          t (if (> t duration) duration t)]
+      (reset! world (compute-animation trans t))
+      (apply-world @world)
+      (when (>= t duration)
+        (Animation/unregisterAnimation transition)))))
+
+(set! (.onload (js* "window"))
+  (fn []
+    (def computed-steps
+      [{::view (client-rect (dom/getElement "view-title"))}
+       {::view (client-rect (dom/getElement "view-main"))}])
+
+    (events/listen
+      (events/KeyHandler. svg true) KeyHandler/EventType.KEY
+      (fn [e]
+        (condp = (.keyCode e)
+          events/KeyCodes.SPACE (alter-step 1)
+          events/KeyCodes.RIGHT (alter-step 1)
+          events/KeyCodes.LEFT  (alter-step -1)
+          nil)))
+
+    (reset! world (nth computed-steps 0))
     (apply-world @world)))
+
