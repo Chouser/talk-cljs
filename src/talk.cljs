@@ -5,11 +5,25 @@
             [goog.events :as events]
             [goog.events.KeyHandler :as KeyHandler]))
 
+; --- configuration ---
+
+(def default-duration 1000)
+
+(def init
+  [:view-title
+   {:title {:opacity 0}}])
+
+(def steps
+  [:view-title {:once/title {:opacity 1}}
+   :view-main {}])
+
+; --- end configuration ---
+
 (def svg (.documentElement js/document))
 
-(defn linear [start end duration]
-  (let [factor (/ (- end start) duration)]
-    (fn [t] (+ start (* t factor)))))
+(defn parameterize [start end]
+  (let [diff (- end start)]
+    (fn [t] (+ start (* t diff)))))
 
 (defn svg-point [x y]
   (let [point (.createSVGPoint svg ())]
@@ -27,6 +41,21 @@
     {:x (.x tl) :y (.y tl)
      :width (- (.x br) (.x tl)) :height (- (.y br) (.y tl))}))
 
+(defn new-transition [start end]
+  (if (number? start)
+    (if (= start end)
+      start
+      (parameterize start end))
+    (zipmap (keys start)
+            (map new-transition (vals start) (vals end)))))
+
+(defn compute-animation [obj t]
+  (if (fn? obj)
+    (obj t)
+    (zipmap (keys obj) (map #(compute-animation % t) (vals obj)))))
+
+; --- end pure functions ---
+
 (defn apply-world [w]
   (doseq [[k v] w]
     (if (= k ::view)
@@ -36,53 +65,34 @@
         (when (:opacity v)
           (set! (.opacity (.style elem))))))))
 
-(def init
-  [:view-title
-   {:title {:opacity 0}}])
-
-(def steps
-  [:view-title {:once/title {:opacity 1}}
-   :view-main {}])
-
 (declare computed-steps)
 
 (def world (atom nil))
 
 (def step (atom 0))
 
-(def duration 1000)
-
-(defn new-transition [start end]
-  (if (number? start)
-    (if (= start end)
-      start
-      (linear start end duration))
-    (zipmap (keys start)
-            (map new-transition (vals start) (vals end)))))
-
-(defn compute-animation [obj t]
-  (if (fn? obj)
-    (obj t)
-    (zipmap (keys obj) (map #(compute-animation % t) (vals obj)))))
-
 (def transition (atom nil))
 
 (defn alter-step [delta]
-  (let [i (swap! step #(max 0 (min (dec (count computed-steps)) (+ % delta))))]
-    (reset! transition
-            (with-meta
-              (new-transition @world (nth computed-steps i))
-              {:start (js/Date.)}))
-    (Animation/registerAnimation transition)))
+  (let [i (swap! step #(max 0 (min (dec (count computed-steps)) (+ % delta))))
+        current-world @world
+        target-world (nth computed-steps i)]
+    (when (not= current-world target-world)
+      (set! (.location js/document) (str \# (pr-str {'slide i})))
+      (reset! transition
+              (with-meta
+                (new-transition current-world target-world)
+                {:start (js/Date.) :duration default-duration}))
+      (Animation/registerAnimation transition))))
 
 (set! (.cycle transition)
   (fn []
     (let [trans @transition
-          t (- (js/Date.) (:start (meta trans)))
-          t (if (> t duration) duration t)]
+          {:keys [start duration]} (meta trans)
+          t (min 1 (/ (- (js/Date.) start) (max duration 1)))]
       (reset! world (compute-animation trans t))
       (apply-world @world)
-      (when (>= t duration)
+      (when (>= t 1)
         (Animation/unregisterAnimation transition)))))
 
 (set! (.onload (js* "window"))
