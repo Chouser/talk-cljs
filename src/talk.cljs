@@ -50,9 +50,10 @@
             (map new-transition (vals start) (vals end)))))
 
 (defn compute-animation [obj t]
-  (if (fn? obj)
-    (obj t)
-    (zipmap (keys obj) (map #(compute-animation % t) (vals obj)))))
+  (cond
+    (fn? obj) (obj t)
+    (map? obj) (zipmap (keys obj) (map #(compute-animation % t) (vals obj)))
+    :else t))
 
 ; --- end pure functions ---
 
@@ -63,7 +64,7 @@
         (.setAttribute svg "viewBox" (str x "," y "," width "," height)))
       (let [elem (dom/getElement (name k))]
         (when (:opacity v)
-          (set! (.opacity (.style elem))))))))
+          (set! (.opacity (.style elem)) (:opacity v)))))))
 
 (declare computed-steps)
 
@@ -98,8 +99,8 @@
 (set! (.onload (js* "window"))
   (fn []
     (def computed-steps
-      [{::view (client-rect (dom/getElement "view-title"))}
-       {::view (client-rect (dom/getElement "view-main"))}])
+      [{::view (client-rect (dom/getElement "view-title")) :title {:opacity 1}}
+       {::view (client-rect (dom/getElement "view-main")) :title {:opacity 0}}])
 
     (events/listen
       (events/KeyHandler. svg true) KeyHandler/EventType.KEY
