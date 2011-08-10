@@ -19,8 +19,8 @@
    style="background: #000; overflow: hidden;">
   <script
      xlink:href="talk.js"
-     type="text/ecmascript"
-     id="script5450" />
+     id="script5450"
+     type="text/ecmascript" />
   <defs
      id="defs4">
     <marker
@@ -58,11 +58,11 @@
      borderopacity="1.0"
      inkscape:pageopacity="1"
      inkscape:pageshadow="2"
-     inkscape:zoom="0.9747195"
-     inkscape:cx="-112.09697"
-     inkscape:cy="755.95881"
+     inkscape:zoom="2.9689941"
+     inkscape:cx="153.04536"
+     inkscape:cy="684.71791"
      inkscape:document-units="px"
-     inkscape:current-layer="all"
+     inkscape:current-layer="title"
      showgrid="false"
      width="1024px"
      inkscape:window-width="1280"
@@ -78,7 +78,8 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title />
+        <dc:title></dc:title>
+        <dc:description></dc:description>
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -97,7 +98,7 @@
          height="767.33136"
          width="1020.6262"
          id="view-main"
-         style="fill:#000000;fill-opacity:1;stroke:none"
+         style="fill:none;fill-opacity:1;stroke:#09ff00;stroke-opacity:1;stroke-width:3;stroke-miterlimit:4;stroke-dasharray:none"
          transform="translate(0,284.36218)" />
       <text
          sodipodi:linespacing="125%"
@@ -213,13 +214,15 @@
          id="title"
          inkscape:label="#g6123"
          transform="matrix(1.8048781,0,0,1.8048781,-172.76112,-830.34954)">
+        <desc
+           id="desc3809">{:opacity 0}</desc>
         <rect
-           y="648.66364"
-           x="155.61658"
-           height="45.151188"
-           width="60.055523"
+           y="652.02271"
+           x="158.97562"
+           height="38.803535"
+           width="51.657921"
            id="view-title"
-           style="fill:#000000;fill-opacity:1;stroke:none"
+           style="fill:none;stroke:#09ff00;stroke-width:1;stroke-opacity:1"
            inkscape:label="#rect6043" />
         <text
            xml:space="preserve"
@@ -238,7 +241,7 @@
              sodipodi:role="line"
              id="tspan3759-08-5"
              x="185.47206"
-             y="667.73199">...wait, what?</tspan></text>
+             y="667.73199">the implementation</tspan></text>
         <text
            xml:space="preserve"
            style="font-size:2.66238523px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:center;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:middle;fill:#ffffff;fill-opacity:1;stroke:none;font-family:Verdana;-inkscape-font-specification:Verdana"
@@ -268,7 +271,7 @@
                height="132.34576"
                x="-64.63398"
                y="44.714996" /></flowRegion><flowPara
-             id="flowPara3032"></flowPara></flowRoot>      </g>
+             id="flowPara3032" /></flowRoot>      </g>
     </g>
   </g>
 </svg>

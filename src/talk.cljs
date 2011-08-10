@@ -1,6 +1,6 @@
 (ns talk
-  (:require [goog.dom :as dom]
-            ;[goog.fx :as fx]
+  (:require #_[cljs.reader :as r]
+            [goog.dom :as dom]
             [goog.fx.Animation :as Animation]
             [goog.events :as events]
             [goog.events.KeyHandler :as KeyHandler]))
@@ -9,9 +9,7 @@
 
 (def default-duration 1000)
 
-(def init
-  [:view-title
-   {:title {:opacity 0}}])
+(def init {:title {:opacity 0}})
 
 (def steps
   [:view-title {:once/title {:opacity 1}}
@@ -41,6 +39,25 @@
     {:x (.x tl) :y (.y tl)
      :width (- (.x br) (.x tl)) :height (- (.y br) (.y tl))}))
 
+(defn compute-steps [init steps]
+  (loop [rtn [], default init, [[id css] & more-steps] (partition 2 steps)]
+    (if-not id
+      rtn
+      (let [comp-step (-> (into default (zipmap (map (comp keyword name)
+                                                     (keys css))
+                                                (vals css)))
+                          (assoc ::view (client-rect
+                                          (dom/getElement (name id)))))
+            new-default (into default
+                              (zipmap (->> (keys css)
+                                           (remove #(= "once" (namespace %)))
+                                           (map (comp keyword name)))
+                                      (vals css)))]
+        (recur
+          (conj rtn comp-step)
+          new-default
+          more-steps)))))
+
 (defn new-transition [start end]
   (if (number? start)
     (if (= start end)
@@ -55,6 +72,9 @@
     (map? obj) (zipmap (keys obj) (map #(compute-animation % t) (vals obj)))
     :else t))
 
+(defn next-step [old-step steps delta]
+  (max 0 (min (dec (count steps)) (+ old-step delta))))
+
 ; --- end pure functions ---
 
 (defn apply-world [w]
@@ -66,7 +86,7 @@
         (when (:opacity v)
           (set! (.opacity (.style elem)) (:opacity v)))))))
 
-(declare computed-steps)
+(def computed-steps (atom nil))
 
 (def world (atom nil))
 
@@ -75,9 +95,9 @@
 (def transition (atom nil))
 
 (defn alter-step [delta]
-  (let [i (swap! step #(max 0 (min (dec (count computed-steps)) (+ % delta))))
+  (let [i (swap! step next-step @computed-steps delta)
         current-world @world
-        target-world (nth computed-steps i)]
+        target-world (nth @computed-steps i)]
     (when (not= current-world target-world)
       (set! (.location js/document) (str \# (pr-str {'slide i})))
       (reset! transition
@@ -98,9 +118,15 @@
 
 (set! (.onload (js* "window"))
   (fn []
-    (def computed-steps
-      [{::view (client-rect (dom/getElement "view-title")) :title {:opacity 1}}
-       {::view (client-rect (dom/getElement "view-main")) :title {:opacity 0}}])
+    ; We don't want this embedded in the SVG doc, when the adjustments to it are
+    ; all in a separate .cljs file.
+    #_(let [init (reduce conj {}
+                       (for [desc (prim-seq
+                                    (.getElementsByTagName svg "desc") 0)]
+                         [(keyword (.getAttribute (.parentNode desc) "id"))
+                          (r/read-string (.textContent desc))]))]
+      (js/alert init))
+    (reset! computed-steps (compute-steps init steps))
 
     (events/listen
       (events/KeyHandler. svg true) KeyHandler/EventType.KEY
@@ -111,6 +137,6 @@
           events/KeyCodes.LEFT  (alter-step -1)
           nil)))
 
-    (reset! world (nth computed-steps 0))
+    (reset! world (nth @computed-steps 0))
     (apply-world @world)))
 
