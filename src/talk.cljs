@@ -13,7 +13,9 @@
 
 (def steps
   [:view-title {:once/title {:opacity 1}}
-   :view-main {}])
+   :view-main {}
+   :view-read {}
+   :view-eval {}])
 
 ; --- end configuration ---
 
@@ -49,10 +51,7 @@
                           (assoc ::view (client-rect
                                           (dom/getElement (name id)))))
             new-default (into default
-                              (zipmap (->> (keys css)
-                                           (remove #(= "once" (namespace %)))
-                                           (map (comp keyword name)))
-                                      (vals css)))]
+                              (remove #(= "once" (namespace (first %))) css))]
         (recur
           (conj rtn comp-step)
           new-default
@@ -126,6 +125,13 @@
                          [(keyword (.getAttribute (.parentNode desc) "id"))
                           (r/read-string (.textContent desc))]))]
       (js/alert init))
+
+    ; Hide view boxes
+    (doseq [rect (prim-seq (.getElementsByTagName svg "rect") 0)]
+      (when (re-find #"^view-" (.id rect))
+        (set! (-> rect .style .visibility) "hidden")))
+
+    ; Compute steps
     (reset! computed-steps (compute-steps init steps))
 
     (events/listen

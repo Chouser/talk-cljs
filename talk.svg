@@ -58,11 +58,11 @@
      borderopacity="1.0"
      inkscape:pageopacity="1"
      inkscape:pageshadow="2"
-     inkscape:zoom="2.9689941"
-     inkscape:cx="153.04536"
-     inkscape:cy="684.71791"
+     inkscape:zoom="0.74224852"
+     inkscape:cx="269.13917"
+     inkscape:cy="527.89187"
      inkscape:document-units="px"
-     inkscape:current-layer="title"
+     inkscape:current-layer="layer1"
      showgrid="false"
      width="1024px"
      inkscape:window-width="1280"
@@ -273,5 +273,21 @@
                y="44.714996" /></flowRegion><flowPara
              id="flowPara3032" /></flowRoot>      </g>
     </g>
+    <rect
+       y="497.9765"
+       x="331.64264"
+       height="257.89877"
+       width="341.76898"
+       id="view-eval"
+       style="fill:none;stroke:#09ff00;stroke-width:1.804878;stroke-opacity:1;overflow:hidden"
+       inkscape:label="#rect6043" />
+    <rect
+       inkscape:label="#rect6043"
+       style="fill:none;stroke:#09ff00;stroke-width:1.804878;stroke-opacity:1;overflow:hidden"
+       id="view-read"
+       width="355.24155"
+       height="268.08255"
+       x="322.21182"
+       y="344.38913" />
   </g>
 </svg>
