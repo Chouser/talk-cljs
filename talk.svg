@@ -60,7 +60,7 @@
      inkscape:pageshadow="2"
      inkscape:zoom="0.74224852"
      inkscape:cx="269.13917"
-     inkscape:cy="527.89187"
+     inkscape:cy="494.86751"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="false"
@@ -90,7 +90,8 @@
      transform="translate(0,-284.36218)">
     <g
        id="all"
-       inkscape:label="#g6045">
+       inkscape:label="#g6045"
+       transform="translate(8.0835459,4.041773)">
       <rect
          inkscape:label="#rect5497"
          y="-1.4913419e-06"
@@ -98,7 +99,7 @@
          height="767.33136"
          width="1020.6262"
          id="view-main"
-         style="fill:none;fill-opacity:1;stroke:#09ff00;stroke-opacity:1;stroke-width:3;stroke-miterlimit:4;stroke-dasharray:none"
+         style="fill:none;stroke:#09ff00;stroke-width:3;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
          transform="translate(0,284.36218)" />
       <text
          sodipodi:linespacing="125%"
@@ -264,7 +265,7 @@
         <flowRoot
            xml:space="preserve"
            id="flowRoot3026"
-           style="fill:black;stroke:none;stroke-opacity:1;stroke-width:1px;stroke-linejoin:miter;stroke-linecap:butt;fill-opacity:1;font-family:Times New Roman;font-style:normal;font-weight:normal;font-size:24px;-inkscape-font-specification:Times New Roman;font-stretch:normal;font-variant:normal;text-anchor:start;text-align:start;writing-mode:lr;line-height:125%;letter-spacing:0px;word-spacing:0px"><flowRegion
+           style="font-size:24px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;font-family:Times New Roman;-inkscape-font-specification:Times New Roman"><flowRegion
              id="flowRegion3028"><rect
                id="rect3030"
                width="372.41483"
@@ -274,20 +275,20 @@
              id="flowPara3032" /></flowRoot>      </g>
     </g>
     <rect
-       y="497.9765"
-       x="331.64264"
-       height="257.89877"
-       width="341.76898"
+       y="374.02881"
+       x="93.178032"
+       height="217.10307"
+       width="287.79846"
        id="view-eval"
        style="fill:none;stroke:#09ff00;stroke-width:1.804878;stroke-opacity:1;overflow:hidden"
        inkscape:label="#rect6043" />
     <rect
        inkscape:label="#rect6043"
-       style="fill:none;stroke:#09ff00;stroke-width:1.804878;stroke-opacity:1;overflow:hidden"
+       style="fill:none;stroke:#09ff00;stroke-width:1.80487788;stroke-opacity:1;overflow:hidden"
        id="view-read"
-       width="355.24155"
-       height="268.08255"
-       x="322.21182"
-       y="344.38913" />
+       width="455.0531"
+       height="343.52896"
+       x="101.26157"
+       y="325.52753" />
   </g>
 </svg>

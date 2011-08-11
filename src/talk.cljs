@@ -1,21 +1,10 @@
 (ns talk
-  (:require #_[cljs.reader :as r]
+  (:require [cljs.reader :as r]
+            [goog.net.XhrIo :as xhrio]
             [goog.dom :as dom]
             [goog.fx.Animation :as Animation]
             [goog.events :as events]
             [goog.events.KeyHandler :as KeyHandler]))
-
-; --- configuration ---
-
-(def default-duration 1000)
-
-(def init {:title {:opacity 0}})
-
-(def steps
-  [:view-title {:once/title {:opacity 1}}
-   :view-main {}
-   :view-read {}
-   :view-eval {}])
 
 ; --- end configuration ---
 
@@ -41,15 +30,16 @@
     {:x (.x tl) :y (.y tl)
      :width (- (.x br) (.x tl)) :height (- (.y br) (.y tl))}))
 
-(defn compute-steps [init steps]
+(defn compute-steps [{:keys [init steps]}]
   (loop [rtn [], default init, [[id css] & more-steps] (partition 2 steps)]
     (if-not id
       rtn
-      (let [comp-step (-> (into default (zipmap (map (comp keyword name)
+      (let [view-elem (or (dom/getElement (name id))
+                          (js/alert (str "Couldn't find view " (name id))))
+            comp-step (-> (into default (zipmap (map (comp keyword name)
                                                      (keys css))
                                                 (vals css)))
-                          (assoc ::view (client-rect
-                                          (dom/getElement (name id)))))
+                          (assoc ::view (client-rect view-elem)))
             new-default (into default
                               (remove #(= "once" (namespace (first %))) css))]
         (recur
@@ -78,12 +68,16 @@
 
 (defn apply-world [w]
   (doseq [[k v] w]
-    (if (= k ::view)
-      (let [{:keys [x y width height]} v]
-        (.setAttribute svg "viewBox" (str x "," y "," width "," height)))
-      (let [elem (dom/getElement (name k))]
-        (when (:opacity v)
-          (set! (.opacity (.style elem)) (:opacity v)))))))
+    (cond
+      (= ::view k)
+        (let [{:keys [x y width height]} v]
+          (.setAttribute svg "viewBox" (str x "," y "," width "," height)))
+      (= :duration k)
+        nil
+      :else
+        (let [elem (dom/getElement (name k))]
+          (when (:opacity v)
+            (set! (.opacity (.style elem)) (:opacity v)))))))
 
 (def computed-steps (atom nil))
 
@@ -102,7 +96,7 @@
       (reset! transition
               (with-meta
                 (new-transition current-world target-world)
-                {:start (js/Date.) :duration default-duration}))
+                {:start (js/Date.) :duration (:duration target-world)}))
       (Animation/registerAnimation transition))))
 
 (set! (.cycle transition)
@@ -117,22 +111,17 @@
 
 (set! (.onload (js* "window"))
   (fn []
-    ; We don't want this embedded in the SVG doc, when the adjustments to it are
-    ; all in a separate .cljs file.
-    #_(let [init (reduce conj {}
-                       (for [desc (prim-seq
-                                    (.getElementsByTagName svg "desc") 0)]
-                         [(keyword (.getAttribute (.parentNode desc) "id"))
-                          (r/read-string (.textContent desc))]))]
-      (js/alert init))
+    (xhrio/send "config.cljs"
+      (fn [x]
+        (let [config (r/read-string (.getResponseText (.target x) ()))]
+          (reset! computed-steps (compute-steps config))
+          (reset! world (nth @computed-steps 0))
+          (apply-world @world))))
 
     ; Hide view boxes
     (doseq [rect (prim-seq (.getElementsByTagName svg "rect") 0)]
       (when (re-find #"^view-" (.id rect))
         (set! (-> rect .style .visibility) "hidden")))
-
-    ; Compute steps
-    (reset! computed-steps (compute-steps init steps))
 
     (events/listen
       (events/KeyHandler. svg true) KeyHandler/EventType.KEY
@@ -141,8 +130,5 @@
           events/KeyCodes.SPACE (alter-step 1)
           events/KeyCodes.RIGHT (alter-step 1)
           events/KeyCodes.LEFT  (alter-step -1)
-          nil)))
-
-    (reset! world (nth @computed-steps 0))
-    (apply-world @world)))
+          nil)))))
 
