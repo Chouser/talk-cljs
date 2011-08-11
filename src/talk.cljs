@@ -69,7 +69,7 @@
   (cond
     (fn? obj) (obj t)
     (map? obj) (zipmap (keys obj) (map #(compute-animation % t) (vals obj)))
-    :else t))
+    :else obj))
 
 (defn next-step [old-step steps delta]
   (max 0 (min (dec (count steps)) (+ old-step delta))))
