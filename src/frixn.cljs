@@ -1,4 +1,7 @@
-(ns talk
+; frixn -- presentations without slides
+; Copyright 2011 (c) Chris Houser. All rights reserved.
+
+(ns frixn
   (:require [cljs.reader :as r]
             [goog.net.XhrIo :as xhrio]
             [goog.dom :as dom]
