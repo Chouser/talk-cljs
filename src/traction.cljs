@@ -1,15 +1,13 @@
-; frixn -- presentations without slides
+; traction -- presentations without slides
 ; Copyright 2011 (c) Chris Houser. All rights reserved.
 
-(ns frixn
+(ns traction
   (:require [cljs.reader :as r]
             [goog.net.XhrIo :as xhrio]
             [goog.dom :as dom]
             [goog.fx.Animation :as Animation]
             [goog.events :as events]
             [goog.events.KeyHandler :as KeyHandler]))
-
-; --- end configuration ---
 
 (def svg (.documentElement js/document))
 
