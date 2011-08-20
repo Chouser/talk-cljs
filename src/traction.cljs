@@ -2,8 +2,7 @@
 ; Copyright 2011 (c) Chris Houser. All rights reserved.
 
 (ns traction
-  (:require [cljs.reader :as r]
-            [goog.net.XhrIo :as xhrio]
+  (:require [goog.net.XhrIo :as xhrio]
             [goog.dom :as dom]
             [goog.fx.Animation :as Animation]
             [goog.events :as events]
@@ -31,22 +30,44 @@
     {:x (.x tl) :y (.y tl)
      :width (- (.x br) (.x tl)) :height (- (.y br) (.y tl))}))
 
-(defn compute-steps [{:keys [init steps]}]
-  (loop [rtn [], default init, [[id css] & more-steps] (partition 2 steps)]
-    (if-not id
-      rtn
-      (let [view-elem (or (dom/getElement (name id))
-                          (js/alert (str "Couldn't find view " (name id))))
-            comp-step (-> (into default (zipmap (map (comp keyword name)
-                                                     (keys css))
-                                                (vals css)))
-                          (assoc ::view (client-rect view-elem)))
-            new-default (into default
-                              (remove #(= "once" (namespace (first %))) css))]
-        (recur
-          (conj rtn comp-step)
-          new-default
-          more-steps)))))
+(defn tags [elem tag-name]
+      ; (dom/$$ tag-name nil elem) ?
+  (prim-seq (.getElementsByTagName elem tag-name) 0))
+
+(defn elem-style [sets]
+  (reduce (fn [out elem]
+            (if-let [duration (.getAttribute elem "duration")]
+              (assoc out :duration (js/parseFloat duration))
+              (let [id (.getAttribute elem "i")]
+                (if (dom/getElement id)
+                  (update-in out [id] assoc :opacity
+                             (js/parseFloat (.getAttribute elem "opacity")))
+                  (js/alert (str "Couldn't find elem " id ))))))
+          {} sets))
+
+(defn compute-steps [config-dom]
+  (let [init (elem-style (-> config-dom (tags "init") first (tags "set")))
+        steps (tags config-dom "step")]
+    (loop [rtn [], default init, [step & more-steps] steps]
+      (if-not step
+        rtn
+        (let [view-rect (if-let [view-id (.getAttribute step "view")]
+                          (client-rect
+                            (or (dom/getElement view-id)
+                                (js/alert (str "Couldn't find view "view-id))))
+                          (or (:view default)
+                              (js/alert "First step requires a view attr")))
+              comp-step (-> (into default (elem-style (tags step "set")))
+                            (assoc :view view-rect))
+              new-default (assoc (->> (tags step "set")
+                                      (remove #(.getAttribute % "once"))
+                                      elem-style
+                                      (into default))
+                                 :view view-rect)]
+          (recur
+            (conj rtn comp-step)
+            new-default
+            more-steps))))))
 
 (defn new-transition [start end]
   (if (number? start)
@@ -70,13 +91,13 @@
 (defn apply-world [w]
   (doseq [[k v] w]
     (cond
-      (= ::view k)
+      (= :view k)
         (let [{:keys [x y width height]} v]
           (.setAttribute svg "viewBox" (str x "," y "," width "," height)))
       (= :duration k)
         nil
       :else
-        (let [elem (dom/getElement (name k))]
+        (let [elem (dom/getElement k)]
           (when (:opacity v)
             (set! (.opacity (.style elem)) (:opacity v)))))))
 
@@ -112,12 +133,15 @@
 
 (set! (.onload (js* "window"))
   (fn []
-    (xhrio/send "config.cljs"
+    (xhrio/send "config.xml"
       (fn [x]
-        (let [config (r/read-string (.getResponseText (.target x) ()))]
-          (reset! computed-steps (compute-steps config))
-          (reset! world (nth @computed-steps 0))
-          (apply-world @world))))
+        (try
+          (let [config (.documentElement (.getResponseXml (.target x) ()))]
+            (reset! computed-steps (compute-steps config))
+            (reset! world (nth @computed-steps 0))
+            (apply-world @world))
+          (catch js/Error e
+            (js/alert (.stack e))))))
 
     ; Hide view boxes
     (doseq [rect (prim-seq (.getElementsByTagName svg "rect") 0)]

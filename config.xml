@@ -1,0 +1,22 @@
+<steps>
+  <init>
+    <set duration="1000" />
+    <set i="title" opacity="0" />
+    <set i="formats-top" opacity="0" />
+    <set i="read-detail" opacity="0" />
+    <set i="eval-detail" opacity="0" />
+    <set i="print-detail" opacity="0" />
+  </init>
+  <step view="view-title">
+    <set i="title" opacity="1" once="true" />
+    <ul>
+      <li>Hope you already know a little about ClojureScript</li>
+      <li>Compare compilers</li>
+      <li>Ready?</li>
+    </ul>
+  </step>
+  <step view="view-main" />
+  <step>
+    <set i="formats-top" opacity="1" />
+  </step>
+</steps>
