@@ -10,18 +10,30 @@
   <step view="view-title">
     <set i="title" opacity="1" once="true" />
     <ul xmlns="http://www.w3.org/1999/xhtml">
+      <li>Wanted to give talk about clj compiler, so I'll talk about both</li>
       <li>Hope you already know a little about ClojureScript</li>
-      <li>Compare compilers</li>
       <li>Ready?</li>
     </ul>
   </step>
-  <step view="view-main" />
+  <step view="view-main">
+    <ul xmlns="http://www.w3.org/1999/xhtml">
+      <li>Familiar RELP loop</li>
+      <li>Also used when AOT compiling clj.</li>
+      <li>Almost the same for cljs.  details later</li>
+      <li>Each top level form</li>
+    </ul>
+  </step>
   <step>
     <set i="formats-top" opacity="1" />
+    <ul xmlns="http://www.w3.org/1999/xhtml">
+    </ul>
   </step>
   <step view="view-read" />
   <step>
     <set i="read-detail" opacity="1" />
+    <ul xmlns="http://www.w3.org/1999/xhtml">
+      <li>#=(...) is eval reader macro</li>
+    </ul>
   </step>
   <step view="view-eval" />
   <step>

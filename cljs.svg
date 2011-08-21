@@ -8,6 +8,7 @@
    xmlns:svg="http://www.w3.org/2000/svg"
    xmlns="http://www.w3.org/2000/svg"
    xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns:html="http://www.w3.org/1999/xhtml"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    width="1024"
@@ -19,8 +20,8 @@
    style="background: #000; overflow: hidden;">
   <script
      xlink:href="traction.js"
-     id="script5450"
-     type="text/ecmascript" />
+     type="text/ecmascript"
+     id="script5450" />
   <defs
      id="defs4">
     <marker
@@ -85,9 +86,9 @@
      borderopacity="1.0"
      inkscape:pageopacity="1"
      inkscape:pageshadow="2"
-     inkscape:zoom="0.01"
-     inkscape:cx="-8343.6457"
-     inkscape:cy="38971.901"
+     inkscape:zoom="0.02"
+     inkscape:cx="-1792.7972"
+     inkscape:cy="42906.682"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="false"
@@ -274,19 +275,6 @@
     </g>
     <text
        sodipodi:linespacing="125%"
-       id="read-detail"
-       y="-37854.895"
-       x="7450.0547"
-       style="font-size:1468.44824219px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:center;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:middle;fill:#ffffff;fill-opacity:1;stroke:none;overflow:hidden;font-family:Verdana;-inkscape-font-specification:Verdana"
-       xml:space="preserve"
-       inkscape:label="#text3344-4-1-1"><tspan
-         dy="0 0 0 0 0 0 0 0 0 0 -21.713963"
-         id="tspan3394-8"
-         y="-37854.895"
-         x="7450.0547"
-         sodipodi:role="line">LispReader.java</tspan></text>
-    <text
-       sodipodi:linespacing="125%"
        id="text3324"
        y="16140.84"
        x="-12477.736"
@@ -411,7 +399,7 @@
          inkscape:connector-curvature="0"
          sodipodi:nodetypes="cc" />
       <path
-         style="fill:#ffffff;fill-opacity:1;stroke:#ffffff;stroke-width:0.78982961;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;marker-end:url(#Arrow2Send);overflow:hidden"
+         style="fill:#ffffff;fill-opacity:1;stroke:#ffffff;stroke-width:0.78983053;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;marker-end:url(#Arrow2Send);overflow:hidden"
          d="m 568.848,613.93064 0,9.72022"
          id="path4097"
          inkscape:connector-curvature="0"
@@ -1179,6 +1167,48 @@
            y="405.44757"
            x="163.52582"
            sodipodi:role="line">Chicago Clojure Users Group</tspan></text>
+    </g>
+    <g
+       id="read-detail"
+       inkscape:label="#g4161">
+      <text
+         inkscape:label="#text3344-4-1-1"
+         xml:space="preserve"
+         style="font-size:1168.50683594px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#ffffff;fill-opacity:1;stroke:none;overflow:hidden;font-family:Verdana;-inkscape-font-specification:Verdana"
+         x="2201.2981"
+         y="-41015.496"
+         id="read-detail-1"
+         sodipodi:linespacing="125%"><tspan
+           sodipodi:role="line"
+           x="2201.2981"
+           y="-41015.496"
+           id="tspan3394-8">• quote</tspan><tspan
+           id="tspan4039"
+           sodipodi:role="line"
+           x="2201.2981"
+           y="-39554.863">• syntax quote</tspan><tspan
+           style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;text-anchor:start;font-family:DejaVu Sans Mono;-inkscape-font-specification:DejaVu Sans Mono"
+           id="tspan4041"
+           sodipodi:role="line"
+           x="2201.2981"
+           y="-38094.23"><tspan
+   style="font-family:Verdana;-inkscape-font-specification:Verdana"
+   id="tspan4159">• </tspan>#=(<tspan
+   id="tspan4043"
+   style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;word-spacing:0px;text-anchor:start;fill:#333333;font-family:DejaVu Sans Mono;-inkscape-font-specification:DejaVu Sans Mono">...</tspan>)</tspan></text>
+      <text
+         inkscape:label="#text3344-4-1-1"
+         xml:space="preserve"
+         style="font-size:1468.44824219px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:center;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:middle;fill:#ffffff;fill-opacity:1;stroke:none;display:inline;overflow:hidden;font-family:Verdana;-inkscape-font-specification:Verdana"
+         x="6992.4712"
+         y="-43287.504"
+         id="read-detail-0"
+         sodipodi:linespacing="125%"><tspan
+           sodipodi:role="line"
+           x="6992.4712"
+           y="-43287.504"
+           id="tspan3394-8-9"
+           dy="0 0 0 0 0 0 0 0 0 0 -21.713963">LispReader.java</tspan></text>
     </g>
   </g>
   <g

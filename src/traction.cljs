@@ -129,11 +129,13 @@
   (alter-step (constantly i)))
 
 (defn open-notes [config-dom]
-  (let [win (gwin/openBlank ""
-                            (.strobj {"target" "traction-notes"
-                                      "width" gwin/DEFAULT_POPUP_WIDTH
-                                      "height" gwin/DEFAULT_POPUP_HEIGHT
-                                      "resizable" true}))
+  (let [win (gwin/openBlank "" (js* "{target: 'traction-notes',
+                                      width: ~{},
+                                      height: ~{},
+                                      scrollbars: true,
+                                      resizable: true}"
+                                      gwin/DEFAULT_POPUP_WIDTH
+                                      gwin/DEFAULT_POPUP_HEIGHT))
         body (.body (.document win))
         notesdom (dom/getDomHelper body)]
     (reset! notes-window win)
@@ -149,6 +151,14 @@
             div (.createDom notesdom "div" nil a)]
         (.appendChild div (.cloneNode step true))
         (.appendChild body div)))
+    (events/listen
+      (events/KeyHandler. body true) KeyHandler/EventType.KEY
+      (fn [e]
+          (condp = (.keyCode e)
+                 events/KeyCodes.SPACE (alter-step inc)
+                 events/KeyCodes.RIGHT (alter-step inc)
+                 events/KeyCodes.LEFT  (alter-step dec)
+                 nil)))
     (.focus win)
     (.focus body)))
 
