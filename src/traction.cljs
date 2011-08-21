@@ -17,14 +17,14 @@
     (fn [t] (+ start (* t diff)))))
 
 (defn svg-point [x y]
-  (let [point (.createSVGPoint svg ())]
+  (let [point (. svg (createSVGPoint))]
     (set! (.x point) x)
     (set! (.y point) y)
     point))
 
 (defn client-rect [elem]
-  (let [bbox (.getBBox elem ())
-        ctm (.getCTM elem ())
+  (let [bbox (. elem (getBBox))
+        ctm (. elem (getCTM))
         tl (.matrixTransform (svg-point (.x bbox) (.y bbox)) ctm)
         br (.matrixTransform (svg-point (+ (.x bbox) (.width bbox))
                                         (+ (.y bbox) (.height bbox)))
@@ -138,7 +138,7 @@
 
 (defn open-notes [config-dom]
   ; hack to get around blank notes on reload:
-  (.close (gwin/openBlank "" (js* "{target: 'traction-notes'}")) ())
+  (. (gwin/openBlank "" (js* "{target: 'traction-notes'}")) (close))
 
   (let [win (gwin/openBlank
               "" (js* "{target: 'traction-notes',
@@ -167,7 +167,7 @@
             events/KeyCodes.RIGHT (alter-step inc)
             events/KeyCodes.LEFT  (alter-step dec)
             nil)))
-    (.focus win ())))
+    (. win (focus))))
 
 (set! (.cycle transition)
   (fn []
@@ -184,7 +184,7 @@
     (xhrio/send "config.xml"
       (fn [x]
         (try
-          (let [config (.documentElement (.getResponseXml (.target x) ()))]
+          (let [config (.documentElement (. (.target x) (getResponseXml)))]
             (reset! computed-steps (compute-steps config))
             (reset! world (nth @computed-steps 0))
             (apply-world @world)
