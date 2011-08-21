@@ -1,4 +1,4 @@
-<steps>
+<steps xmlns="http://chouser.n01se.net/traction/config">
   <init>
     <set duration="1000" />
     <set i="title" opacity="0" />
@@ -9,7 +9,7 @@
   </init>
   <step view="view-title">
     <set i="title" opacity="1" once="true" />
-    <ul>
+    <ul xmlns="http://www.w3.org/1999/xhtml">
       <li>Hope you already know a little about ClojureScript</li>
       <li>Compare compilers</li>
       <li>Ready?</li>
@@ -19,4 +19,29 @@
   <step>
     <set i="formats-top" opacity="1" />
   </step>
+  <step view="view-read" />
+  <step>
+    <set i="read-detail" opacity="1" />
+  </step>
+  <step view="view-eval" />
+  <step>
+    <set i="eval-detail" opacity="1" />
+  </step>
+  <step view="view-eval-detail" />
+  <step view="view-analyze" />
+  <step view="view-pojos" />
+  <step view="view-analyze" />
+  <step view="view-nested-maps" />
+  <step view="view-analyze" />
+  <step view="view-emit-in" />
+  <step view="view-emit-out" />
+  <step view="view-load" />
+  <step view="view-eval" />
+  <step view="view-print" />
+  <step>
+    <set i="print-detail" opacity="1" />
+  </step>
+  <step view="view-print-detail" />
+  <step view="view-loop" />
+  <step view="view-main" />
 </steps>

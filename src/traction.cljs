@@ -4,6 +4,7 @@
 (ns traction
   (:require [goog.net.XhrIo :as xhrio]
             [goog.dom :as dom]
+            [goog.window :as gwin]
             [goog.fx.Animation :as Animation]
             [goog.events :as events]
             [goog.events.KeyHandler :as KeyHandler]))
@@ -83,8 +84,8 @@
     (map? obj) (zipmap (keys obj) (map #(compute-animation % t) (vals obj)))
     :else obj))
 
-(defn next-step [old-step steps delta]
-  (max 0 (min (dec (count steps)) (+ old-step delta))))
+(defn limit-step [old-step steps f]
+  (max 0 (min (dec (count steps)) (f old-step))))
 
 ; --- end pure functions ---
 
@@ -101,6 +102,8 @@
           (when (:opacity v)
             (set! (.opacity (.style elem)) (:opacity v)))))))
 
+(def notes-window (atom nil))
+
 (def computed-steps (atom nil))
 
 (def world (atom nil))
@@ -109,17 +112,45 @@
 
 (def transition (atom nil))
 
-(defn alter-step [delta]
-  (let [i (swap! step next-step @computed-steps delta)
+(defn alter-step [f]
+  (let [i (swap! step limit-step @computed-steps f)
         current-world @world
         target-world (nth @computed-steps i)]
     (when (not= current-world target-world)
-      (set! (.location js/document) (str \# (pr-str {'slide i})))
+      (set! (.hash (.location @notes-window)) (str \# (str "step" i)))
+      (set! (.hash (.location js/document)) (str \# (pr-str {'step i})))
       (reset! transition
               (with-meta
                 (new-transition current-world target-world)
                 {:start (js/Date.) :duration (:duration target-world)}))
       (Animation/registerAnimation transition))))
+
+(defn set-step [i]
+  (alter-step (constantly i)))
+
+(defn open-notes [config-dom]
+  (let [win (gwin/openBlank ""
+                            (.strobj {"target" "traction-notes"
+                                      "width" gwin/DEFAULT_POPUP_WIDTH
+                                      "height" gwin/DEFAULT_POPUP_HEIGHT
+                                      "resizable" true}))
+        body (.body (.document win))
+        notesdom (dom/getDomHelper body)]
+    (reset! notes-window win)
+    (.appendChild body
+      (.createDom notesdom "style" (.strobj {"type" "text/css"})
+        "body{ background: #000; color: #eee; }
+        a { color: #88f; text-decoration: underline; cursor: pointer; }"))
+    (doseq [[i step] (map-indexed vector (tags config-dom "step"))]
+      (let [a (.createDom notesdom
+                "a" (.strobj {"name" (str "step" i) "id" (str "step" i)})
+                (str "Step " i ": " (.getAttribute step "view")))
+            _ (events/listen a "click" ((fn [i] #(set-step i)) i))
+            div (.createDom notesdom "div" nil a)]
+        (.appendChild div (.cloneNode step true))
+        (.appendChild body div)))
+    (.focus win)
+    (.focus body)))
 
 (set! (.cycle transition)
   (fn []
@@ -139,7 +170,8 @@
           (let [config (.documentElement (.getResponseXml (.target x) ()))]
             (reset! computed-steps (compute-steps config))
             (reset! world (nth @computed-steps 0))
-            (apply-world @world))
+            (apply-world @world)
+            (open-notes config))
           (catch js/Error e
             (js/alert (.stack e))))))
 
@@ -152,8 +184,8 @@
       (events/KeyHandler. svg true) KeyHandler/EventType.KEY
       (fn [e]
         (condp = (.keyCode e)
-          events/KeyCodes.SPACE (alter-step 1)
-          events/KeyCodes.RIGHT (alter-step 1)
-          events/KeyCodes.LEFT  (alter-step -1)
+          events/KeyCodes.SPACE (alter-step inc)
+          events/KeyCodes.RIGHT (alter-step inc)
+          events/KeyCodes.LEFT  (alter-step dec)
           nil)))))
 
