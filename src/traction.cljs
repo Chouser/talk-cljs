@@ -4,6 +4,7 @@
 (ns traction
   (:require [goog.net.XhrIo :as xhrio]
             [goog.dom :as dom]
+            [goog.style :as style]
             [goog.window :as gwin]
             [goog.fx.Animation :as Animation]
             [goog.events :as events]
@@ -117,7 +118,14 @@
         current-world @world
         target-world (nth @computed-steps i)]
     (when (not= current-world target-world)
-      (set! (.hash (.location @notes-window)) (str \# (str "step" i)))
+      ; update notes window
+      (let [id (str "step" i)
+            notes-body (.body (.document @notes-window))
+            notes-dom (dom/getDomHelper notes-body)]
+        (set! (.scrollTop notes-body)
+          (style/getPageOffsetTop (.getElement notes-dom id))))
+
+      ; update main window
       (set! (.hash (.location js/document)) (str \# (pr-str {'step i})))
       (reset! transition
               (with-meta
@@ -129,38 +137,37 @@
   (alter-step (constantly i)))
 
 (defn open-notes [config-dom]
-  (let [win (gwin/openBlank "" (js* "{target: 'traction-notes',
-                                      width: ~{},
-                                      height: ~{},
-                                      scrollbars: true,
-                                      resizable: true}"
-                                      gwin/DEFAULT_POPUP_WIDTH
-                                      gwin/DEFAULT_POPUP_HEIGHT))
+  ; hack to get around blank notes on reload:
+  (.close (gwin/openBlank "" (js* "{target: 'traction-notes'}")) ())
+
+  (let [win (gwin/openBlank
+              "" (js* "{target: 'traction-notes',
+                        width: ~{}, height: ~{},
+                        scrollbars: true, resizable: true}"
+                      gwin/DEFAULT_POPUP_WIDTH gwin/DEFAULT_POPUP_HEIGHT))
         body (.body (.document win))
         notesdom (dom/getDomHelper body)]
     (reset! notes-window win)
-    (.appendChild body
+    (dom/append body
       (.createDom notesdom "style" (.strobj {"type" "text/css"})
-        "body{ background: #000; color: #eee; }
-        a { color: #88f; text-decoration: underline; cursor: pointer; }"))
+        "body{ background: #000; color: #eee; padding-bottom: 100%; }
+        a { color: #88f; text-decoration: underline; cursor: pointer; }")
+      (.createDom notesdom "h4" nil "Speaker's Notes [Traction]"))
     (doseq [[i step] (map-indexed vector (tags config-dom "step"))]
-      (let [a (.createDom notesdom
-                "a" (.strobj {"name" (str "step" i) "id" (str "step" i)})
-                (str "Step " i ": " (.getAttribute step "view")))
-            _ (events/listen a "click" ((fn [i] #(set-step i)) i))
-            div (.createDom notesdom "div" nil a)]
-        (.appendChild div (.cloneNode step true))
-        (.appendChild body div)))
+      (let [a (.createDom notesdom "a" (.strobj {"id" (str "step" i)})
+                          (str "Step " i ": " (.getAttribute step "view")))]
+        (events/listen a "click" ((fn [i] #(set-step i)) i)) ; CLJS-59
+        (dom/append body (.createDom notesdom "div" nil a)
+                    (.cloneNode step true))))
     (events/listen
       (events/KeyHandler. body true) KeyHandler/EventType.KEY
       (fn [e]
           (condp = (.keyCode e)
-                 events/KeyCodes.SPACE (alter-step inc)
-                 events/KeyCodes.RIGHT (alter-step inc)
-                 events/KeyCodes.LEFT  (alter-step dec)
-                 nil)))
-    (.focus win)
-    (.focus body)))
+            events/KeyCodes.SPACE (alter-step inc)
+            events/KeyCodes.RIGHT (alter-step inc)
+            events/KeyCodes.LEFT  (alter-step dec)
+            nil)))
+    (.focus win ())))
 
 (set! (.cycle transition)
   (fn []
