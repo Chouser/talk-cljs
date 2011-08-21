@@ -184,7 +184,11 @@
     (xhrio/send "config.xml"
       (fn [x]
         (try
-          (let [config (.documentElement (. (.target x) (getResponseXml)))]
+          (let [config (if-let [xml (. (.target x) (getResponseXml))]
+                         (.documentElement xml)
+                         (if-let [elems (.getElementsByTagName svg "steps")]
+                            (aget elems 0)
+                            (js/alert "No traction steps found")))]
             (reset! computed-steps (compute-steps config))
             (reset! world (nth @computed-steps 0))
             (apply-world @world)
