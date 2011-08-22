@@ -4,8 +4,20 @@
     <set i="title" opacity="0" />
     <set i="formats-top" opacity="0" />
     <set i="read-detail" opacity="0" />
+    <set i="example-text" opacity="0" />
+    <set i="example-code" opacity="0" />
     <set i="eval-detail" opacity="0" />
+    <set i="analyze-detail" opacity="0" />
+    <set i="analyze-data" opacity="0" />
+    <set i="emit-detail" opacity="0" />
+    <set i="emit-data" opacity="0" />
+    <set i="load-detail" opacity="0" />
+    <set i="run-data" opacity="0" />
+    <set i="emit-files" opacity="0" />
+    <set i="pojo" opacity="0" />
+    <set i="poco" opacity="0" />
     <set i="print-detail" opacity="0" />
+    <set i="q" opacity="0" />
   </init>
   <step view="view-title">
     <set i="title" opacity="1" once="true" />
@@ -18,14 +30,18 @@
   <step view="view-main">
     <ul xmlns="http://www.w3.org/1999/xhtml">
       <li>Familiar loop</li>
-      <li>Also used when AOT compiling clj.</li>
-      <li>Almost the same for cljs.  details later</li>
+      <li>Read/Eval used when AOT compiling clj.</li>
+      <li>Read and most of Eval for cljs.  details later</li>
       <li>Each top level form</li>
     </ul>
   </step>
   <step>
     <set i="formats-top" opacity="1" />
     <ul xmlns="http://www.w3.org/1999/xhtml">
+      <li>Text or string of top level form</li>
+      <li>Nested lists of symbols, some vectors, etc.</li>
+      <li>Whatever is returned by evaluated code.</li>
+      <li>Nothing really passed to/from loop, just control flow</li>
     </ul>
   </step>
   <step view="view-read" />
@@ -35,19 +51,60 @@
       <li>#=(...) is eval reader macro</li>
     </ul>
   </step>
-  <step view="view-eval" />
+  <step>
+    <set i="example-text" opacity="1" />
+    <ul xmlns="http://www.w3.org/1999/xhtml">
+      <li>We'll walk a small example through the whole process</li>
+    </ul>
+  </step>
+  <step>
+    <set i="example-code" opacity="1" />
+    <ul xmlns="http://www.w3.org/1999/xhtml">
+      <li>Each circle is a collection of type list</li>
+      <li>Words are symbols, not strings</li>
+    </ul>
+  </step>
+  <step view="view-eval">
+    <ul xmlns="http://www.w3.org/1999/xhtml">
+    </ul>
+  </step>
   <step>
     <set i="eval-detail" opacity="1" />
   </step>
   <step view="view-eval-detail" />
   <step view="view-analyze" />
-  <step view="view-pojos" />
+  <step>
+    <set i="analyze-detail" opacity="1" />
+  </step>
+  <step>
+    <set i="analyze-data" opacity="1" />
+  </step>
+  <step view="view-pojos">
+    <set i="pojo" opacity="1" />
+  </step>
   <step view="view-analyze" />
-  <step view="view-nested-maps" />
+  <step view="view-nested-maps">
+    <set i="poco" opacity="1" />
+  </step>
   <step view="view-analyze" />
   <step view="view-emit-in" />
+  <step>
+    <set i="emit-detail" opacity="1" />
+  </step>
+  <step>
+    <set i="emit-data" opacity="1" />
+  </step>
   <step view="view-emit-out" />
+  <step>
+    <set i="emit-files" opacity="1" />
+  </step>
   <step view="view-load" />
+  <step>
+    <set i="load-detail" opacity="1" />
+  </step>
+  <step>
+    <set i="run-data" opacity="1" />
+  </step>
   <step view="view-eval" />
   <step view="view-print" />
   <step>
@@ -56,4 +113,7 @@
   <step view="view-print-detail" />
   <step view="view-loop" />
   <step view="view-main" />
+  <step>
+    <set i="q" opacity="1" />
+  </step>
 </steps>
