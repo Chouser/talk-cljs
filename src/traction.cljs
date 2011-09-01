@@ -118,20 +118,20 @@
         current-world @world
         target-world (nth @computed-steps i)]
     (when (not= current-world target-world)
-      ; update notes window
-      (let [id (str "step" i)
-            notes-body (.body (.document @notes-window))
-            notes-dom (dom/getDomHelper notes-body)]
-        (set! (.scrollTop notes-body)
-          (style/getPageOffsetTop (.getElement notes-dom id))))
-
       ; update main window
       (set! (.hash (.location js/document)) (str \# (pr-str {'step i})))
       (reset! transition
               (with-meta
                 (new-transition current-world target-world)
                 {:start (js/Date.) :duration (:duration target-world)}))
-      (Animation/registerAnimation transition))))
+      (Animation/registerAnimation transition)
+
+      ; update notes window
+      (let [id (str "step" i)
+            notes-body (.body (.document @notes-window))
+            notes-dom (dom/getDomHelper notes-body)]
+        (set! (.scrollTop notes-body)
+          (style/getPageOffsetTop (.getElement notes-dom id)))))))
 
 (defn set-step [i]
   (alter-step (constantly i)))
@@ -194,12 +194,15 @@
             (apply-world @world)
             (open-notes config))
           (catch js/Error e
-            (js/alert (.stack e))))))
+            (js/alert (str e \newline (.stack e)))))))
 
     ; Hide view boxes
     (doseq [rect (prim-seq (.getElementsByTagName svg "rect") 0)]
       (when (re-find #"^view-" (.id rect))
         (set! (-> rect .style .visibility) "hidden")))
+
+    (events/listen svg "click"
+      #(alter-step (if (< 512 (.clientX %)) inc dec)))
 
     (events/listen
       (events/KeyHandler. svg true) KeyHandler/EventType.KEY
